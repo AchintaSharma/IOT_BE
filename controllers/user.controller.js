@@ -1,5 +1,4 @@
 const User = require("../models/user.model");
-
 /**
  * Find all users : admin
  */

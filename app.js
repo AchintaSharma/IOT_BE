@@ -74,6 +74,7 @@ async function init () {
 
 require("./routes/auth.routes")(app);
 require("./routes/user.routes")(app);
+require("./routes/data.routes")(app);
 /**
  * Start the server
  */

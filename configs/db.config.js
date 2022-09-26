@@ -1,3 +1,3 @@
 module.exports = {
-    DB_URL : "mongodb://localhost/eshop_app"
+    DB_URL : "mongodb://localhost/iot_remote_app"
 }
