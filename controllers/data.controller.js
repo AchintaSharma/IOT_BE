@@ -1,5 +1,5 @@
+const { stdout } = require("process");
 const Data = require("../models/data.model");
-
 
 exports.findAllData = async (req, res) => {
     try {
@@ -18,22 +18,26 @@ exports.findAllData = async (req, res) => {
 }
 
 
-exports.createData = async (req, res) => {
-    try {
-        const dataObj = {
-            temperature: req.body.temperature,
-            weight: req.body.weight,
-            ambientTemp: req.body.ambientTemp,
-            camera1FilePath : req.body.camera1FilePath,
-            camera2FilePath : req.body.camera1FilePath,
-            camera3FilePath : req.body.camera1FilePath,
-            camera4FilePath : req.body.camera1FilePath,
-        }
+exports.getData = async (req, res) => {
+    const { exec } = require('child_process');
 
-        const dataCreated = await Data.create(dataObj)
-        res.status(200).send(dataCreated)
+    const foo = function (cb) {
+       exec('python ./dummydata/main.py', (err, stdout, stderr) => {
+            if (err) {
+                console.error(`exec error: ${err}`);
+                return cb(err);
+            }
+            console.log(`stdout: ${stdout}`);
+            cb(null, { stdout, stderr });
+        });
+        
+    };
 
-    } catch (err) {
-        console.lof("error while creating data");
-    }
+    foo(async function (err, { stdout, stderr }) {
+        
+        let data = JSON.parse(stdout); 
+        const dataCreated = await Data.create(data);
+
+        return res.status(200).send(dataCreated);
+    });
 }
