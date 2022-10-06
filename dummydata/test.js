@@ -1,6 +1,6 @@
 const { exec } = require('child_process');
 
-const foo = function(cb){
+const foo = function (cb) {
 
   let data = "";
   exec('python main.py', (err, stdout, stderr) => {
@@ -9,15 +9,15 @@ const foo = function(cb){
       return cb(err);
     }
     console.log(`stdout: ${stdout}`);
-    cb(null, {stdout,stderr});
+    cb(null, { stdout, stderr });
   });
 
 };
 
-foo(function(err, {stdout,stderr}) {
+foo(function (err, { stdout, stderr }) {
   // check for err first
- // then use stdout/stderr
- console.log("err" , err)
- console.log(stdout);
- return stdout;
+  // then use stdout/stderr
+  console.log("err", err)
+  console.log(stdout);
+  return stdout;
 });

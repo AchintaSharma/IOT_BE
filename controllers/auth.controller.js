@@ -20,11 +20,11 @@ exports.signup = async (req, res) => {
         role: req.body.role,
         userName: req.body.userName
     }
-    
+
     try {
         //Store user in DB
         const user = await User.create(userObj);
-    
+
         //Return response 
         const userResp = {
             email: user.email,
@@ -48,43 +48,43 @@ exports.signup = async (req, res) => {
      * User login
      */
 
- exports.signin = async (req, res) => {
+exports.signin = async (req, res) => {
     //Check if the user exists
-    const user = await User.findOne({ userName : req.body.userName});
-    
-    if(!user) {
+    const user = await User.findOne({ userName: req.body.userName });
+
+    if (!user) {
         return res.status(400).send({
-            message : "User does not exist"
+            message: "User does not exist"
         })
     }
 
     //Check if the password is correct 
-   
+
     const isPasswordValid = bcrypt.compareSync(req.body.password, user.password);
-    if(!isPasswordValid) {
+    if (!isPasswordValid) {
         return res.status(400).send({
-            message : "Password is incorrect"
+            message: "Password is incorrect"
         })
     }
 
     //Generate the token 
 
     const token = jwt.sign({
-        userName : user.userName,
-        role : user.role,
-        createdAt : Date.now()
-    }, authSecret.secret, {expiresIn : 600})
+        userName: user.userName,
+        role: user.role,
+        createdAt: Date.now()
+    }, authSecret.secret, { expiresIn: 600 })
 
     //Return response
 
     return res.status(200).send({
-        email : user.email,
-        firstName : user.firstName,
-        lastName : user.lastName,
-        phoneNumber : user.userName,
-        role : user.role,
-        userName : user.userName,
-        accessToken : token
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        phoneNumber: user.userName,
+        role: user.role,
+        userName: user.userName,
+        accessToken: token
     })
 }
 
