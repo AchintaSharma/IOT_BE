@@ -9,6 +9,7 @@ const dbConfig = require("./configs/db.config");
 const User = require("./models/user.model");
 const constants = require("./utils/constants")
 const bcrypt = require("bcryptjs");
+const ngrokConfig = require('./configs/ngrok.config');
 
 
 /**
@@ -38,28 +39,28 @@ db.once("open", () => {
 /**
  * Initialize : Check for and create ADMIN creds
  */
-async function init () {
+async function init() {
     //Check if admin is present
     try {
-        const adminUser = await User.findOne({role : constants.roles.admin});
+        const adminUser = await User.findOne({ role: constants.roles.admin });
 
-        if(adminUser) {
+        if (adminUser) {
             console.log("Admin user already exists");
             return;
-        } 
+        }
     } catch (err) {
         console.log("Error while fetching user", err.message);
     }
 
     try {
         const user = await User.create({
-            email : "23achinta@gmail.com",
-            firstName : "Achinta",
-            lastName : "Sharma",
-            password : bcrypt.hashSync("welcome", 10),
-            phoneNumber : "7002795845",
-            role : constants.roles.admin,
-            userName : "AchintaSharma"
+            email: "23achinta@gmail.com",
+            firstName: "Achinta",
+            lastName: "Sharma",
+            password: bcrypt.hashSync("welcome", 10),
+            phoneNumber: "7002795845",
+            role: constants.roles.admin,
+            userName: "AchintaSharma"
         })
 
         console.log(user);
@@ -79,6 +80,7 @@ require("./routes/data.routes")(app);
  * Start the server
  */
 app.listen(serverConfig.PORT, () => {
+    ngrokConfig.connectNgrok();
     console.log(`Server started at PORT : ${serverConfig.PORT}`);
 
 })

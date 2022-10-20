@@ -21,12 +21,12 @@ exports.getData = async (req, res) => {
     const { exec } = require('child_process');
 
     const foo = function (cb) {
-        exec('+', (err, stdout, stderr) => {
+        exec('python ./dummydata/main.py', (err, stdout, stderr) => {
             if (err) {
                 console.error(`exec error: ${err}`);
                 return cb(err);
             }
-            console.log(`stdout: ${stdout}`);
+            // console.log(`stdout: ${stdout}`);
             cb(null, { stdout, stderr });
         });
     };
@@ -35,7 +35,9 @@ exports.getData = async (req, res) => {
 
         let data = JSON.parse(stdout);
         const dataCreated = await Data.create(data);
-
+        res.header({
+            "ngrok-skip-browser-warning": 1
+        })
         return res.status(200).send(dataCreated);
     });
 }
