@@ -17,12 +17,11 @@ exports.findAllData = async (req, res) => {
     }
 }
 
-
 exports.getData = async (req, res) => {
     const { exec } = require('child_process');
 
     const foo = function (cb) {
-       exec('python ./dummydata/main.py', (err, stdout, stderr) => {
+        exec('+', (err, stdout, stderr) => {
             if (err) {
                 console.error(`exec error: ${err}`);
                 return cb(err);
@@ -30,12 +29,11 @@ exports.getData = async (req, res) => {
             console.log(`stdout: ${stdout}`);
             cb(null, { stdout, stderr });
         });
-        
     };
 
     foo(async function (err, { stdout, stderr }) {
-        
-        let data = JSON.parse(stdout); 
+
+        let data = JSON.parse(stdout);
         const dataCreated = await Data.create(data);
 
         return res.status(200).send(dataCreated);
